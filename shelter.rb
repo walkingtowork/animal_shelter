@@ -1,9 +1,10 @@
 class Shelter
-	attr_accessor :address, :name, :num_pets, :pets, :cages
-	def initialize(address, name, cages)
+
+	attr_accessor :address, :name, :pets, :cages
+
+	def initialize(name, address, cages)
 		@address = address
 		@name = name
-		@num_pets = @pets.count
 		@pets = {}
 		@cages = cages
 	end
@@ -12,19 +13,23 @@ class Shelter
 		if num_pets < @cages
 			return true
 		else 
-			return false	
+			return false
+		end	
 	end
 
-	def available_to_receive?
-		if has_space? is true, return "available"
-		else return "unavailable"
+	def num_pets
+    @pets.keys.length
+  end
 
-		if has_space == true
-			return "available"
-		else 
+	def able_to_receive?
+		if has_space? == true
+			return "able"
+		else
+			return "unable"
+		end
 	end
 
 	def to_s
-		"The #{@name} at #{@address} has #{num_pets} available to adopt. They are #{available_to_receive} pets."
-
+		"The #{name} at #{address} has #{num_pets} pets available for adoption. They are #{able_to_receive?} to receive your unwanted pets."
+	end
 end
