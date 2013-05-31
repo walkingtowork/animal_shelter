@@ -12,6 +12,9 @@ require "pry"
 require_relative "shelter"
 require_relative "pet"
 require_relative "client"
+require_relative "AnimalGraphics"
+
+include AnimalGraphics
 
 shelter = nil
 
@@ -21,16 +24,26 @@ shelter = nil
 #create pets
 #populate each
 
-s1 = Shelter.new("Woodland Shelter", "124 Woodland Drive", 30)
+tree_friends = Shelter.new("Happy Tree Friends", "124 Woodland Drive", 30)
 
-p1 = Pet.new("Fluffy", "Dog", "squeaky ball", "shelter")
-p2 = Pet.new("Spot", "Dog", "shoe", "shelter")
+dog1 = Pet.new("Fluffy", "dog", "squeaky ball", "shelter")
+dog2 = Pet.new("Spot", "dog", "shoe", "shelter")
+cat = Pet.new("Boots", "cat", "boots", "shelter")
+giraffe = Pet.new("Geoffrey", "giraffe", "race car", "shelter")
+brontosaurus = Pet.new("Little Foot", "brontosaurus", "tree star", "shelter")
+stegosaurus = Pet.new("Spike", "stegosaurus", "Ducky", "shelter")
 
 
-s1.pets["Fluffy"] = p1
-s1.pets["Spot"] = p2
+tree_friends.pets["Fluffy"] = dog1
+tree_friends.pets["Spot"] = dog2
+tree_friends.pets["Boots"] = cat
+tree_friends.pets["Geoffrey"] = giraffe
+tree_friends.pets["Little Foot"] = brontosaurus
+tree_friends.pets["Spike"] = stegosaurus
 
 #App starts
+puts Pet::SHELTER_NAME
+puts Pet::DOG_IMAGE_TWO
 
 while @goal_response != "adopt" && @goal_response != "donate"
   puts "Would you like to adopt (adopt) a pet or donate (donate) a pet?"
@@ -40,23 +53,29 @@ end
 puts "What is your name?"
 name_response = gets.chomp
 
-puts "How many pets do you own (0, 1, 2, etc.)?"
-num_pets_response = gets.chomp.to_i
-
-c1 = Client.new(name_response, num_pets_response, @goal_response)
+user = Client.new(name_response, @goal_response)
 
 #adopt or donate
-if c1.goal_to_adopt == "adopt"
- puts "Here is a list of all of the pets in our shelter. "
- puts s1.pets.values
+if user.goal_to_adopt == "adopt"
+  selected_pets = {}
+  while selected_pets == {}
+    puts "What type of pet would you like to adopt?"
+    pet_type = gets.chomp
+    selected_pets = tree_friends.pets.select{|key, value| value.type == pet_type}
+  end
+
+
+ puts "Here is a list of all of the #{pet_type}s in our shelter. "
+ puts selected_pets.values
+
 
  puts "Which one would you like to adopt?"
  adopt_response = gets.chomp
 
- c1.pets[adopt_response] = s1.pets[adopt_response]
- s1.pets.delete(adopt_response)
+ user.pets[adopt_response] = tree_friends.pets[adopt_response]
+ tree_friends.pets.delete(adopt_response)
  puts "Thank you for adopting #{adopt_response}!"
- p c1
+ p user
 else #donate
   puts "Which pet would you like to give up for adoption?"
   pet_name = gets.chomp
@@ -67,8 +86,8 @@ else #donate
   puts "What is #{pet_name}'s favorite toy?"
   pet_toy = gets.chomp
 
-  new_pet = Pet.new(pet_name, pet_type, pet_toy, c1)
-  c1.pets[new_pet] = new_pet
+  new_pet = Pet.new(pet_name, pet_type, pet_toy, user)
+  user.pets[new_pet] = new_pet
 
   puts "Are you sure you want to give #{pet_name} up for adoption (yes/no)?"
   give_away = gets.chomp 
@@ -77,27 +96,11 @@ else #donate
     puts "Yay! You decided to keep #{pet_name}!"
   else
     puts "Say goodbye to #{pet_name}..." 
-    p c1
-    p s1
-    s1.pets[new_pet] = c1.pets[new_pet]
-    c1.pets.delete(new_pet)
-    c1.num_pets = c1.num_pets - 1
-    p s1
-    p c1  
+    tree_friends.pets[new_pet] = user.pets[new_pet]
+    user.pets.delete(new_pet)
+    puts Pet::SAD_PUPPY
   end
 end
-
-
-puts new_pet
-#p c1
-#p s1
-
-# elsif 
-# 	response == "quit"
-# 	puts "Thank you."
-# else
-# 	puts "Thank you." #fix this
-# end
 
 
 # If adopt, list shelters with available pets

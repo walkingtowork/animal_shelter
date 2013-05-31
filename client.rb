@@ -1,10 +1,9 @@
 class Client
-	attr_accessor :name, :goal_to_adopt, :pets, :num_pets
-	def initialize(name, num_pets, goal_to_adopt)
+	attr_accessor :name, :goal_to_adopt, :pets
+	def initialize(name, goal_to_adopt)
 		@name = name
 		@pets = {}
 		@goal_to_adopt = goal_to_adopt
-    @num_pets = num_pets
 	end
 
 	def able_to_donate
@@ -20,6 +19,6 @@ class Client
   end
 
 	def to_s
-		"#{name} has #{num_pets} #{@num_pets} pet(s)."
+		"#{name} has #{num_pets} pet(s)."
 	end
 end
