@@ -56,6 +56,10 @@ name_response = gets.chomp
 user = Client.new(name_response, @goal_response)
 
 #adopt or donate
+
+puts tree_friends.pets #change this to print just pet types
+#puts tree_friends.pets[key].value.each something like this?
+
 if user.goal_to_adopt == "adopt"
   selected_pets = {}
   while selected_pets == {}
@@ -75,7 +79,7 @@ if user.goal_to_adopt == "adopt"
  user.pets[adopt_response] = tree_friends.pets[adopt_response]
  tree_friends.pets.delete(adopt_response)
  puts "Thank you for adopting #{adopt_response}!"
- p user
+ #p user
 else #donate
   puts "Which pet would you like to give up for adoption?"
   pet_name = gets.chomp
